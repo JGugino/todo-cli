@@ -1,31 +1,13 @@
-/*
-Copyright © 2023 Joshua Gugino <gugino.inquires@gmail.com>
-*/
 package cmd
 
 import (
-	"github.com/spf13/cobra"
+	"github.com/JGugino/todo-cli/todo"
 )
 
-// addCmd represents the add command
-var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Adds a new list or item",
-	Long: `Add a new list or item based on its defined flags`,
-	Run: func(cmd *cobra.Command, args []string) {
-	},
+type AddCmd struct{
+	TodoHandler *todo.TodoHandler
 }
 
-func init() {
-	rootCmd.AddCommand(addCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+func (add *AddCmd) ExecuteAction(cmd *Command){
+	
 }
