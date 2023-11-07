@@ -1,5 +1,10 @@
 package todo
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 type TodoHandler struct{
 	TodoLists map[string] *TodoList
 }
@@ -19,6 +24,34 @@ func NewTodoHandler() *TodoHandler{
 	return &TodoHandler{
 		TodoLists: make(map[string]*TodoList),
 	}
+}
+
+func LoadTodoList(){
+	fileData, err := ReadWholeFile("./", "data.json")
+
+	if err != nil{
+		fileContents := TodoList{
+			ListName: "Default List",
+			TodoItems: make(map[string]TodoItem),
+		}
+
+		fileContents.TodoItems["Example One"] = TodoItem{TodoName: "Example One", TodoValue: "This is the first example todo item.", Completed: false}
+		fileContents.TodoItems["Example Two"] = TodoItem{TodoName: "Example Two", TodoValue: "This is the second example todo item.", Completed: true}
+
+		marshalledData, _ := json.Marshal(fileContents)
+		CreateNewFile("./", "data.json", string(marshalledData))
+		fmt.Println("error: " + err.Error())
+	}
+
+	var list TodoList
+
+	mErr := json.Unmarshal(fileData, &list)
+
+	if mErr != nil {
+		panic("Unable to marshal")
+	}
+
+	fmt.Println(list)
 }
 
 func (handler *TodoHandler) AddList(name string, items map[string]TodoItem){

@@ -1,0 +1,15 @@
+{
+	"listName": "Default List",
+	"todoItems": {
+		"Example One": {
+			"todoName": "Example One",
+			"todoValue": "This is the first example todo item.",
+			"completed": false
+		},
+		"Example Two": {
+			"todoName": "Example Two",
+			"todoValue": "This is the second example todo item.",
+			"completed": true
+		}
+	}
+}

@@ -15,6 +15,8 @@ func main(){
 	commandHandler := cmd.NewCommandHandler(os.Args[2:], os.Args[1:2][0])
 	todoHandler := todo.NewTodoHandler()
 
+	todo.LoadTodoList()
+
 	todoHandler.AddList("Default List", make(map[string]todo.TodoItem))
 	todoHandler.AddTodo("Default List", "Exmaple Todo", "This is an example todo item", false)
 	todoHandler.AddTodo("Default List", "Exmaple Todo 2", "This is an example todo item", true)
