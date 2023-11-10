@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/JGugino/todo-cli/cmd"
@@ -9,18 +10,24 @@ import (
 
 func main(){
 	if len(os.Args) <= 1{
-		panic("Not enough arguments")
+		fmt.Println("Invalid command! type 'todo help' for more information.")
+		return
 	}
 
 	commandHandler := cmd.NewCommandHandler(os.Args[2:], os.Args[1:2][0])
 	todoHandler := todo.NewTodoHandler()
 
-	todo.LoadTodoList()
+	list, err := todo.MustLoadTodoList()
 
-	todoHandler.AddList("Default List", make(map[string]todo.TodoItem))
-	todoHandler.AddTodo("Default List", "Exmaple Todo", "This is an example todo item", false)
-	todoHandler.AddTodo("Default List", "Exmaple Todo 2", "This is an example todo item", true)
-	todoHandler.AddTodo("Default List", "Exmaple Todo 3", "This is an example todo item", false)
+	if err != nil {
+		panic("Unable to load todo lists, please try again.")
+	}
+
+	todoHandler.AddList(list.ListName, make(map[string]todo.TodoItem))
+
+	for n, v := range list.TodoItems {
+		todoHandler.AddTodo(list.ListName, n, v.TodoValue, v.Completed)	
+	}
 
 	commandHandler.AddCommand(&cmd.Command{CommandName: "add", CommandDesc: "Adds a new todo item to the list.", CommandAction: &cmd.AddCmd{TodoHandler: todoHandler}})
 	commandHandler.AddCommand(&cmd.Command{CommandName: "remove", CommandDesc: "Removes a command from the todo list", CommandAction: &cmd.RemoveCmd{TodoHandler: todoHandler}})
@@ -33,5 +40,5 @@ func main(){
 		panic(err)
 	}
 
-	commandHandler.HandleCommand(currentCmd)
+	commandHandler.HandleCommand(commandHandler, currentCmd)
 }

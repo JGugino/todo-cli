@@ -11,9 +11,9 @@ type ListCmd struct{
 	Commands map[string]*Command
 }
 
-func (list *ListCmd) ExecuteAction(cmd *Command){
-	fmt.Printf("Active Todo Items (%s): \n", list.TodoHandler.TodoLists["Default List"].ListName)
-	fmt.Println("------------------------------")
+func (list *ListCmd) ExecuteAction(handler *CommandHandler, cmd *Command){
+	fmt.Println("All Todo Items")
+	fmt.Println("----------------")
 	for n, v := range list.TodoHandler.ListTodoItemsFromSpecifiedList("Default List") {
 		if v.Completed {
 			fmt.Printf("%s: [X] \n", n)

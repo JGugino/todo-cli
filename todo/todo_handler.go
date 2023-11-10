@@ -2,7 +2,6 @@ package todo
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 type TodoHandler struct{
@@ -26,7 +25,7 @@ func NewTodoHandler() *TodoHandler{
 	}
 }
 
-func LoadTodoList(){
+func MustLoadTodoList() (TodoList, error){
 	fileData, err := ReadWholeFile("./", "data.json")
 
 	if err != nil{
@@ -38,9 +37,13 @@ func LoadTodoList(){
 		fileContents.TodoItems["Example One"] = TodoItem{TodoName: "Example One", TodoValue: "This is the first example todo item.", Completed: false}
 		fileContents.TodoItems["Example Two"] = TodoItem{TodoName: "Example Two", TodoValue: "This is the second example todo item.", Completed: true}
 
-		marshalledData, _ := json.Marshal(fileContents)
+		marshalledData, err := json.Marshal(fileContents)
+
+		if err != nil{
+			panic("Unable to marshal default list contents")
+		}
+
 		CreateNewFile("./", "data.json", string(marshalledData))
-		fmt.Println("error: " + err.Error())
 	}
 
 	var list TodoList
@@ -51,7 +54,7 @@ func LoadTodoList(){
 		panic("Unable to marshal")
 	}
 
-	fmt.Println(list)
+	return list, nil
 }
 
 func (handler *TodoHandler) AddList(name string, items map[string]TodoItem){

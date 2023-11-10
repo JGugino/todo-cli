@@ -1,15 +1,1 @@
-{
-	"listName": "Default List",
-	"todoItems": {
-		"Example One": {
-			"todoName": "Example One",
-			"todoValue": "This is the first example todo item.",
-			"completed": false
-		},
-		"Example Two": {
-			"todoName": "Example Two",
-			"todoValue": "This is the second example todo item.",
-			"completed": true
-		}
-	}
-}
+{"listName":"Default List","todoItems":{"Clean Room":{"todoName":"Clean Room","todoValue":"Clean the room and then paint walls","completed":false},"Example":{"todoName":"Example","todoValue":"This is an example todo added through the add command","completed":false},"Example One":{"todoName":"Example One","todoValue":"This is the first example todo item.","completed":false},"Example Three":{"todoName":"Example Three","todoValue":"This is the third example todo item.","completed":false},"Example Two":{"todoName":"Example Two","todoValue":"This is the second example todo item.","completed":true}}}

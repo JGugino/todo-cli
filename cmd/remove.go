@@ -10,6 +10,6 @@ type RemoveCmd struct{
 	TodoHandler *todo.TodoHandler
 }
 
-func (remove *RemoveCmd) ExecuteAction(cmd *Command){
+func (remove *RemoveCmd) ExecuteAction(handler *CommandHandler, cmd *Command){
 	fmt.Println("Removing todo")
 }

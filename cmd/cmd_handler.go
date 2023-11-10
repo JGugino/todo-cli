@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
+
+	"github.com/JGugino/todo-cli/todo"
 )
 
 type CommandAction interface{
-	ExecuteAction(cmd *Command)
+	ExecuteAction(cmdHandler *CommandHandler, command *Command)
 }
 
 type CommandHandler struct{
@@ -69,12 +73,39 @@ func (handler *CommandHandler) ValidateAndReturnCommand() (*Command, error){
 	found := handler.commands[handler.command]
 
 	if found == nil{
-		return nil, errors.New("no command found");
+		return nil, errors.New("no-command-found");
 	}
 
 	return found, nil
 }
 
-func (handler *CommandHandler) HandleCommand(command *Command){
-	command.CommandAction.ExecuteAction(command)
+func (handler *CommandHandler) ValidateAndReturnFlag(flag string) (string, error){
+
+	for _, v := range handler.args{
+		splitArg := strings.Split(v, "=")
+
+		if len(splitArg) < 2{
+			return "", errors.New("invalid-flag")
+		}
+
+		if splitArg[0] == flag{
+			return splitArg[1], nil
+		}
+	}
+	
+	return "", errors.New("unknown-flag")
+}
+
+func (handler *CommandHandler) MustSaveTodoListAfterAction(todoList todo.TodoList){
+	marshalledData, err := json.Marshal(todoList)
+
+	if err != nil{
+		panic("unable to marshal list")
+	}
+
+	todo.CreateNewFile("./", "data.json", string(marshalledData))
+}
+
+func (handler *CommandHandler) HandleCommand(cmdHandler *CommandHandler, command *Command){
+	command.CommandAction.ExecuteAction(cmdHandler, command)
 }
