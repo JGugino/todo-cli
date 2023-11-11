@@ -65,6 +65,10 @@ func (handler *TodoHandler) AddTodo(list string, name string, value string, comp
 	handler.TodoLists[list].TodoItems[name] = TodoItem{TodoName: name, TodoValue: value, Completed: completed}
 }
 
+func (handler *TodoHandler) RemoveTodo(list  string, name string){
+	delete(handler.TodoLists[list].TodoItems, name)
+}
+
 func (handler *TodoHandler) ListTodoItemsFromSpecifiedList(list string) map[string]TodoItem{
 	return handler.TodoLists[list].TodoItems
 }

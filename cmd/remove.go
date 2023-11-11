@@ -11,5 +11,14 @@ type RemoveCmd struct{
 }
 
 func (remove *RemoveCmd) ExecuteAction(handler *CommandHandler, cmd *Command){
-	fmt.Println("Removing todo")
+	todoName, err := handler.ValidateAndReturnFlag("-n")
+
+	if err != nil{
+		panic("Invalid arguments, type 'todo help' for more information.")
+	}
+
+	remove.TodoHandler.RemoveTodo("Default List", todoName)
+	handler.MustSaveTodoListAfterAction(*remove.TodoHandler.TodoLists["Default List"])
+
+	fmt.Println("Todo item removed successfully")
 }
