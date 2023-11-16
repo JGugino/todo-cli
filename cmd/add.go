@@ -11,15 +11,20 @@ type AddCmd struct{
 }
 
 func (add *AddCmd) ExecuteAction(handler *CommandHandler, cmd *Command){
-	todoName, err := handler.ValidateAndReturnFlag("-n")
-	todoValue, err := handler.ValidateAndReturnFlag("-v")
+	todoName, err1 := handler.ValidateAndReturnFlag("-n")
+	todoValue, err2 := handler.ValidateAndReturnFlag("-v")
 
-	if err != nil{
+	if err1 != nil || err2 != nil{
 		panic("Invalid arguments, type 'todo help' for more information.")
 	}
 
-	add.TodoHandler.AddTodo("Default List", todoName, todoValue, false)
+	addErr := add.TodoHandler.AddTodo("Default List", todoName, todoValue, false)
+
+	if addErr != nil {
+		panic(addErr)
+	}
+
 	handler.MustSaveTodoListAfterAction(*add.TodoHandler.TodoLists["Default List"])
 
-	fmt.Println("Todo item added successfully")
+	fmt.Printf("Todo (%s) has been added. \n", todoName)
 }

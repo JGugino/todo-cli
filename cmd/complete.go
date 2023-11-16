@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/JGugino/todo-cli/todo"
 )
 
@@ -9,14 +11,19 @@ type CompleteCmd struct{
 }
 
 func (comp *CompleteCmd) ExecuteAction(handler *CommandHandler, cmd *Command){
-	// todoName, err := handler.ValidateAndReturnFlag("-n")
+	todoName, err := handler.ValidateAndReturnFlag("-n")
 
-	// if err != nil{
-	// 	panic("Invalid arguments, type 'todo help' for more information.")
-	// }
+	if err != nil{
+		panic("Invalid arguments, type 'todo help' for more information.")
+	}
 
-	// add.TodoHandler.AddTodo("Default List", todoName, todoValue, false)
-	// handler.MustSaveTodoListAfterAction(*add.TodoHandler.TodoLists["Default List"])
+	compErr := comp.TodoHandler.CompleteTodo("Default List", todoName)
 
-	// fmt.Println("Todo item added successfully")
+	if compErr != nil {
+		panic(compErr)
+	}
+
+	handler.MustSaveTodoListAfterAction(*comp.TodoHandler.TodoLists["Default List"])
+
+	fmt.Printf("Todo (%s) has been completed. \n", todoName)
 }

@@ -29,8 +29,9 @@ func main(){
 		todoHandler.AddTodo(list.ListName, n, v.TodoValue, v.Completed)	
 	}
 
-	commandHandler.AddCommand(&cmd.Command{CommandName: "add", CommandDesc: "Adds a new todo item to the list.", CommandAction: &cmd.AddCmd{TodoHandler: todoHandler}})
-	commandHandler.AddCommand(&cmd.Command{CommandName: "remove", CommandDesc: "Removes a command from the todo list", CommandAction: &cmd.RemoveCmd{TodoHandler: todoHandler}})
+	commandHandler.AddCommand(&cmd.Command{CommandName: "add", CommandDesc: "Adds a new todo item to the list. (-n='NAME OF TODO' -v='VALUE OF TODO')", CommandAction: &cmd.AddCmd{TodoHandler: todoHandler}})
+	commandHandler.AddCommand(&cmd.Command{CommandName: "remove", CommandDesc: "Removes a command from the todo list (-n='NAME OF TODO')", CommandAction: &cmd.RemoveCmd{TodoHandler: todoHandler}})
+	commandHandler.AddCommand(&cmd.Command{CommandName: "complete", CommandDesc: "Marks the specified todo as completed (-n='NAME OF TODO')", CommandAction: &cmd.CompleteCmd{TodoHandler: todoHandler}})
 	commandHandler.AddCommand(&cmd.Command{CommandName: "list", CommandDesc: "Lists out all items on the todo list", CommandAction: &cmd.ListCmd{TodoHandler: todoHandler}})
 	commandHandler.AddCommand(&cmd.Command{CommandName: "help", CommandDesc: "Prints out a list of all available commands and their descriptions", CommandAction: &cmd.HelpCmd{Commands: commandHandler.GetCommands()}})
 

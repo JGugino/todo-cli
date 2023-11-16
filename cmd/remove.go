@@ -17,8 +17,13 @@ func (remove *RemoveCmd) ExecuteAction(handler *CommandHandler, cmd *Command){
 		panic("Invalid arguments, type 'todo help' for more information.")
 	}
 
-	remove.TodoHandler.RemoveTodo("Default List", todoName)
+	remErr := remove.TodoHandler.RemoveTodo("Default List", todoName)
+	
+	if remErr != nil {
+		panic(remErr)
+	}
+
 	handler.MustSaveTodoListAfterAction(*remove.TodoHandler.TodoLists["Default List"])
 
-	fmt.Println("Todo item removed successfully")
+	fmt.Printf("Todo (%s) has been removed. \n", todoName)
 }

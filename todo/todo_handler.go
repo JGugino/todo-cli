@@ -2,6 +2,7 @@ package todo
 
 import (
 	"encoding/json"
+	"errors"
 )
 
 type TodoHandler struct{
@@ -61,12 +62,53 @@ func (handler *TodoHandler) AddList(name string, items map[string]TodoItem){
 	handler.TodoLists[name] = &TodoList{ListName: name, TodoItems: items};
 }
 
-func (handler *TodoHandler) AddTodo(list string, name string, value string, completed bool){
+func (handler *TodoHandler) AddTodo(list string, name string, value string, completed bool) error{
+	exists := handler.TodoExists(list, name)
+
+	if exists {
+		return errors.New("Todo named (" + name + ") already exists")
+	}
+
 	handler.TodoLists[list].TodoItems[name] = TodoItem{TodoName: name, TodoValue: value, Completed: completed}
+
+	return nil
 }
 
-func (handler *TodoHandler) RemoveTodo(list  string, name string){
+func (handler *TodoHandler) RemoveTodo(list  string, name string) error{
+	exists := handler.TodoExists(list, name)
+
+	if !exists {
+		return errors.New("No todo named (" + name + ") found")
+	}
+
 	delete(handler.TodoLists[list].TodoItems, name)
+
+	return nil
+}
+
+func (handler *TodoHandler) CompleteTodo(list string, name string) error{
+	exists := handler.TodoExists(list, name)
+
+	if !exists {
+		return errors.New("No todo named (" + name + ") found")
+	}
+
+	handler.TodoLists[list].TodoItems[name] = TodoItem{
+		TodoName: handler.TodoLists[list].TodoItems[name].TodoName, 
+		TodoValue: handler.TodoLists[list].TodoItems[name].TodoValue, 
+		Completed: true,
+	}
+
+	return nil
+}
+
+
+func (handler *TodoHandler) TodoExists(list string, name string) bool{
+	if _, ok := handler.TodoLists[list].TodoItems[name]; !ok{
+		return false
+	}
+
+	return true
 }
 
 func (handler *TodoHandler) ListTodoItemsFromSpecifiedList(list string) map[string]TodoItem{
